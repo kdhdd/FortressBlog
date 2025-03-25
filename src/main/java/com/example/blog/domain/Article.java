@@ -21,6 +21,9 @@ public class Article {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "author", nullable = false)
+    private String author;
+
     @Column(name = "title", nullable = false)
     private String title;
 

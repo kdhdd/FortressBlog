@@ -21,6 +21,9 @@ public class User implements UserDetails {  // UserDetails를 상속받아 인�
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "nickname", unique = true)
+    private String nickname;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -70,5 +73,11 @@ public class User implements UserDetails {  // UserDetails를 상속받아 인�
     public boolean isEnabled() {
         // 계정이 사용 가능한지 확인하는 로직
         return true;    // true -> 사용 가능
+    }
+
+    public User update(String nickname) {
+        this.nickname = nickname;
+
+        return this;
     }
 }
