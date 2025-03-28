@@ -3,19 +3,18 @@ package com.example.blog.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Table(name = "comments")
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
 @Builder
-public class Article {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +24,6 @@ public class Article {
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -35,15 +31,6 @@ public class Article {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @LastModifiedDate   // 엔티티가 수정될 때 수정 시간 저장
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
-
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+    @ManyToOne
+    private Article article;
 }
