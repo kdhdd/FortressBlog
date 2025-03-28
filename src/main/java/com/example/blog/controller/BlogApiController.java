@@ -1,9 +1,8 @@
 package com.example.blog.controller;
 
 import com.example.blog.domain.Article;
-import com.example.blog.dto.AddArticleRequest;
-import com.example.blog.dto.ArticleResponse;
-import com.example.blog.dto.UpdateArticleRequest;
+import com.example.blog.domain.Comment;
+import com.example.blog.dto.*;
 import com.example.blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,5 +63,19 @@ public class BlogApiController {
 
         return ResponseEntity.ok()
                 .body(updatedArticle);
+    }
+
+        /*
+     ------------------------------------------------------------------------------------------
+                                    댓글 컨트롤러 로직
+     ------------------------------------------------------------------------------------------
+     */
+
+    @PostMapping("/comments")
+    public ResponseEntity<AddCommentResponse> addComment(@RequestBody AddCommentReqeust reqeust, Principal principal) {
+        Comment savedComment = blogService.addComment(reqeust, principal.getName());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AddCommentResponse(savedComment));
     }
 }
