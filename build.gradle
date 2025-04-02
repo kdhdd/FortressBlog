@@ -65,3 +65,17 @@ tasks.named("jar") {
 //tasks.named('test') {
 //	useJUnitPlatform()
 //}
+
+def querydslDir = "src/main/generated"
+
+sourceSets {
+	main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean.doLast {
+	file(querydslDir).deleteDir()
+}
