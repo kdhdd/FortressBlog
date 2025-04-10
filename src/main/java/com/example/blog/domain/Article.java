@@ -30,6 +30,10 @@ public class Article {
 
     @Column(name = "content", nullable = false)
     private String content;
+    
+    // S3에 업로드된 파일 URL을 저장할 필드 추가
+    @Column
+    private String imageUrl;
 
     @CreatedDate    // 엔티티가 생성될 때 생성 시간 저장
     @Column(name = "created_at")

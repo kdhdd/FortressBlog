@@ -2,16 +2,20 @@ package com.example.blog.service;
 
 import com.example.blog.domain.Article;
 import com.example.blog.domain.Comment;
+import com.example.blog.domain.User;
 import com.example.blog.dto.AddArticleRequest;
 import com.example.blog.dto.AddCommentReqeust;
 import com.example.blog.dto.UpdateArticleRequest;
 import com.example.blog.repository.BlogRepository;
 import com.example.blog.repository.CommentRepository;
+import com.example.blog.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,9 +24,29 @@ public class BlogService {
 
     private final BlogRepository blogRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final S3Uploader s3Uploader;
 
-    public Article save(AddArticleRequest request, String userName) {
-        return blogRepository.save(request.toEntity(userName));
+    @Transactional
+    public Article save(AddArticleRequest request, List<MultipartFile> files, String userName) {
+        List<String> urls = (files == null || files.isEmpty()) ? List.of() : files.stream()
+                .map(multipartFile -> {
+                    try {
+                        return s3Uploader.upload(multipartFile, "recommend");
+                    } catch (IOException e) {
+                        throw new RuntimeException("파일 업로드 중 오류 발생: " + e.getMessage(), e);
+                    }
+                })
+                .toList();
+
+        Article article = Article.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .author(userName)
+                .imageUrl(String.join(",", urls))
+                .build();
+
+        return blogRepository.save(article);
     }
 
     public List<Article> findAll() {
