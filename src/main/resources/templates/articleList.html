@@ -99,9 +99,11 @@
             <!-- 카드 리스트: 3개씩(화면 크기에 따라 자동 줄바꿈) -->
             <div class="card-deck" th:each="item : ${articles}">
                 <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-muted" th:text="'글 번호: ' + ${item.id}"></div>
                     <div class="card-body">
                         <h5 class="card-title font-weight-bold" th:text="${item.title}"></h5>
+                        <div th:if="${item.imageUrl != null and item.imageUrl != ''}">
+                            <img th:src="${item.imageUrl}" alt="Article Image" class="card-img-top">
+                        </div>
                         <p class="card-text" th:text="${item.content}"></p>
                         <a th:href="@{/articles/{id}(id=${item.id})}"
                            class="btn btn-primary">

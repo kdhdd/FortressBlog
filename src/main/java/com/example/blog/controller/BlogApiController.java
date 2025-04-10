@@ -6,8 +6,10 @@ import com.example.blog.dto.*;
 import com.example.blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,9 +21,10 @@ public class BlogApiController {
 
     private final BlogService blogService;
 
-    @PostMapping("/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal) {
-        Article savedArticle = blogService.save(request, principal.getName());
+    @PostMapping(path = "/articles", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Article> addArticle(@RequestPart("articleDto") AddArticleRequest request,
+                                              @RequestPart(value = "files", required = false)List<MultipartFile> files, Principal principal) {
+        Article savedArticle = blogService.save(request, files, principal.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
