@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -32,8 +33,10 @@ public class Article {
     private String content;
     
     // S3에 업로드된 파일 URL을 저장할 필드 추가
-    @Column
-    private String imageUrl;
+    @ElementCollection
+    @CollectionTable(name = "article_images", joinColumns = @JoinColumn(name = "article_id"))
+    @Column(name = "image_url")
+    private List<String> imageUrls = new ArrayList<>();
 
     @CreatedDate    // 엔티티가 생성될 때 생성 시간 저장
     @Column(name = "created_at")
