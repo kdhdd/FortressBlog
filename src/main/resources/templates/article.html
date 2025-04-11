@@ -22,9 +22,11 @@
                          th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')} By ${article.author}|"></div>
                 </header>
                 <section class="mb-5">
-                    <!-- 이미지가 존재할 경우 이미지 출력 -->
-                    <div th:if="${article.imageUrl != null and article.imageUrl != ''}">
-                        <img th:src="${article.imageUrl}" alt="Article Image" class="img-fluid mb-4">
+                    <!-- 이미지가 여러 개일 경우 모두 출력 -->
+                    <div th:if="${article.imageUrls != null and article.imageUrls.size() > 0}">
+                        <div class="mb-4" th:each="image : ${article.imageUrls}">
+                            <img th:src="${image}" alt="Article Image" class="img-fluid mb-3">
+                        </div>
                     </div>
                     <p class="fs-5 mb-4" th:text="${article.content}"></p>
                 </section>

@@ -43,7 +43,7 @@ public class BlogService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .author(userName)
-                .imageUrl(String.join(",", urls))
+                .imageUrls(urls)
                 .build();
 
         return blogRepository.save(article);

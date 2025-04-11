@@ -101,8 +101,8 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title font-weight-bold" th:text="${item.title}"></h5>
-                        <div th:if="${item.imageUrl != null and item.imageUrl != ''}">
-                            <img th:src="${item.imageUrl}" alt="Article Image" class="card-img-top">
+                        <div th:if="${item.imageUrls != null and item.imageUrls.size() > 0}">
+                            <img th:src="${item.imageUrls[0]}" class="img-fluid mb-2" alt="썸네일 이미지" />
                         </div>
                         <p class="card-text" th:text="${item.content}"></p>
                         <a th:href="@{/articles/{id}(id=${item.id})}"
